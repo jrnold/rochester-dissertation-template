@@ -1,90 +1,184 @@
 % Place an \includeonly here to only compile certain parts
 % e.g.: \includeonly{title,chapter-first,references}
-
-\documentclass[12pt,oneside]{book}
-\usepackage[T1]{fontenc}
-\usepackage{fancyhdr}           % For page number in the upper right
-                                % (required) and other running headers
-                                % (optional)
-\usepackage{setspace}           % For double-spacing (required)
+\documentclass[12pt]{memoir}
+%\usepackage{setspace}           % For double-spacing (required)
 \usepackage{titlesec}           % For keeping section/chapter titles
                                 % single-spaced
-\usepackage{etoolbox}           % For the flag determining if front matter
-                                % goes into the TOC
 \usepackage{blindtext}          % For generating dummy text in the sample
                                 % output, can be removed
-\usepackage{natbib}
+
+%\usepackage[style=authoryear]{biblatex}
+%\bibliography{dissertation.bib}
 
 % Header height (to avoid fancyhdr error)
-\setlength{\headheight}{13.6pt}
+%\setlength{\headheight}{13.6pt}
 
 % Header formatting for regular pages
-\fancyhf{}
-\fancyhead[L]{\it\small\leftmark}
-\fancyhead[R]{\small\thepage}
+\copypagestyle{regular}{empty}
+\makeevenhead{regular}{\itshape\small\leftmark}{}{\small\thepage}
+\makeoddhead{regular}{\itshape\small\leftmark}{}{\small\thepage}
+\makeheadrule{regular}{\headwidth}{\normalrulethickness}
 
 % Header formatting for chapter title pages
-\fancypagestyle{plain}{%
-  \fancyhf{}
-  \fancyhead[R]{\small\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-}
+\copypagestyle{newtitle}{empty}
+\makeevenhead{newtitle}{}{}{\small\thepage}
+\makeoddhead{newtitle}{}{}{\small\thepage}
+\aliaspagestyle{chapter}{newtitle}
 
 % Formatting of chapter and section titles: keep them single-spaced in the
 % midst of double-spaced text
 \titleformat{\chapter}[display]%
-{\bfseries\singlespacing\Large}%
+{\bfseries\Large\SingleSpacing}%
 {Chapter~\thechapter}%
 {1em}%
 {\LARGE}
 
 \titleformat{\section}[hang]%
-{\bfseries\singlespacing\Large}%
+{\bfseries\Large\SingleSpacing}%
 {\thesection}%
 {0.25in}%
 {}
 
 \titleformat{\subsection}[hang]%
-{\bfseries\singlespacing\large}%
+{\bfseries\large\SingleSpacing}%
 {\thesubsection}%
 {0.25in}%
 {}
 
-% Flag for whether to add front matter to TOC
-\newtoggle{fulltoc}
-\togglefalse{fulltoc}  % Change to \toggletrue{fulltoc} to include front matter
+\usepackage{fontspec,xltxtra,xunicode}
+\setmainfont[Ligatures=TeX]{Linux Libertine O}
+\setsansfont[Ligatures=TeX, Scale=MatchLowercase]{Source Sans Pro}
+\setmonofont[Scale=MatchLowercase]{Source Code Pro}
 
+\usepackage{placeins}
+
+\frenchspacing
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-% Title page
-\include{01-title}
+\begin{titlingpage}
+  \vspace*{\fill}
+
+  \begin{center}
+    {\LARGE \bfseries
+      Three Essays on the Quantitative Analysis of War,
+      with an Emphasis on the American Civil War
+      \par
+    }
+
+    \bigskip%
+    by
+
+    \bigskip%
+    Jeffrey B. Arnold
+
+    %%%%%
+
+    \bigskip\bigskip\bigskip\bigskip%
+    Submitted in Partial Fulfillment of the
+
+    \bigskip%
+    Requirements for the Degree
+
+    \bigskip%
+    Doctor of Philosophy
+
+    %%%%%
+
+    \bigskip\bigskip\bigskip\bigskip%
+    Supervised by Professor Randall Stone
+
+    \bigskip\bigskip%
+    Department of Political Science
+
+    \bigskip%
+    University of Rochester
+
+    %%%%%
+
+    \bigskip\bigskip\bigskip\bigskip%
+    University of Rochester
+
+    \bigskip%
+    Rochester, New York
+
+    %%%%%
+
+    \bigskip\bigskip\bigskip\bigskip%
+    2016
+  \end{center}
+
+  \vspace*{\fill}
+\end{titlingpage}
 
 % All subsequent pages must be numbered, title page is considered page i,
 % front matter is numbered in lowercase Roman numerals
-\pagestyle{fancy}
 \pagenumbering{roman}
 \setcounter{page}{2}
-\doublespacing
+
+%\doublespacing
+\DoubleSpacing
 
 % Dedication (optional)
-\include{02-dedication}
+\begin{center}
+  \vspace*{\fill}
+  \itshape%
+  \input{dedication}
+  \vspace*{\fill}
+\end{center}
+
+\clearpage
+
 
 % Biographical sketch
-\include{03-bio}
+\chapter*{Biographical Sketch}
+\markboth{\MakeUppercase{Biographical Sketch}}{}
+\addcontentsline{toc}{chapter}{Biographical Sketch}
+\input{bio}
+
 
 % Acknowledgments
-\include{04-acknowledgments}
+\chapter*{Acknowledgments}
+\markboth{\MakeUppercase{Acknowledgments}}{}
+\addcontentsline{toc}{chapter}{Acknowledgments}
+\input{acknowledgements}
 
-% Abstract
-\include{05-abstract}
+
+% ABSTRACT
+\chapter*{Abstract}
+\markboth{\MakeUppercase{Abstract}}{}
+\addcontentsline{toc}{chapter}{Abstract}
+\input{abstract}
+
 
 % Contributors and Funding Sources
-\include{06-contrib}
+\chapter*{Contributors and Funding Sources}
+\markboth{\MakeUppercase{Contributors and Funding Sources}}{}
+\addcontentsline{toc}{chapter}{Contributors and Funding Sources}
+\input{contrib}
+
+\newpage
 
 % Table of Contents, List of Tables, List of Figures
-\include{07-contents}
+% Main TOC
+\tableofcontents
+
+\newpage{}
+
+% List of tables, if applicable
+\listoftables
+\addcontentsline{toc}{chapter}{List of Tables}
+
+\newpage{}
+
+% List of figures, if applicable
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
 
 %%%%%%%%%%%%%%%%%%%% DISSERTATION CONTENT %%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{regular}
 
 % Regular numbering starts now, first page of first chapter is page 1
 \clearpage
@@ -92,11 +186,15 @@
 \pagenumbering{arabic}
 
 % Body
-\include{08-chapter-01}
-\include{08-chapter-02}
+\include{chapter-01}
+\include{chapter-02}
 
 % References
 \clearpage
-\include{09-references}
+\addcontentsline{toc}{chapter}{Bibliography}
+%\singlespacing
+
+% Bibtex commands go here
+% \printbibliography{}
 
 \end{document}
