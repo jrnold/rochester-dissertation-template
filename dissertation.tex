@@ -1,50 +1,39 @@
-% Place an \includeonly here to only compile certain parts
-% e.g.: \includeonly{title,chapter-first,references}
-\documentclass[12pt]{memoir}
-%\usepackage{setspace}           % For double-spacing (required)
-\usepackage{titlesec}           % For keeping section/chapter titles
-                                % single-spaced
+\documentclass[12pt,oneside,openright]{memoir}
 \usepackage{blindtext}          % For generating dummy text in the sample
-                                % output, can be removed
 
-%\usepackage[style=authoryear]{biblatex}
-%\bibliography{dissertation.bib}
+\usepackage[style=authoryear]{biblatex}
+\bibliography{dissertation.bib}
 
 % Header height (to avoid fancyhdr error)
 %\setlength{\headheight}{13.6pt}
 
 % Header formatting for regular pages
-\copypagestyle{regular}{empty}
+\makepagestyle{regular}
 \makeevenhead{regular}{\itshape\small\leftmark}{}{\small\thepage}
 \makeoddhead{regular}{\itshape\small\leftmark}{}{\small\thepage}
-\makeheadrule{regular}{\headwidth}{\normalrulethickness}
 
 % Header formatting for chapter title pages
-\copypagestyle{newtitle}{empty}
+\makepagestyle{newtitle}
 \makeevenhead{newtitle}{}{}{\small\thepage}
 \makeoddhead{newtitle}{}{}{\small\thepage}
 \aliaspagestyle{chapter}{newtitle}
 
-% Formatting of chapter and section titles: keep them single-spaced in the
-% midst of double-spaced text
-\titleformat{\chapter}[display]%
-{\bfseries\Large\SingleSpacing}%
-{Chapter~\thechapter}%
-{1em}%
-{\LARGE}
+% Long quotes are single-spaced
+\usepackage{quoting}
+\renewcommand*{\quotingfont}{\setSpace{1}}
 
-\titleformat{\section}[hang]%
-{\bfseries\Large\SingleSpacing}%
-{\thesection}%
-{0.25in}%
-{}
+% Formatting of chapter and section titles:
+% keep them single-spaced in the midst of double-spaced text
+\makechapterstyle{dissertation}{%
+  \renewcommand{\chapnumfont}{\Huge\bfseries\sffamily}%
+  \renewcommand{\chapnamefont}{\Huge\bfseries\sffamily\scshape}%
+  \renewcommand{\chaptitlefont}{\normalfont\Huge\sffamily\scshape\setSpacing{0.95}}%
+}
+\chapterstyle{dissertation}
+\setsecheadstyle{\Large\sffamily\raggedright\setSpacing{0.95}}
+\setsubsecheadstyle{\large\normalfont\itshape\raggedright\setSpacing{0.95}}
 
-\titleformat{\subsection}[hang]%
-{\bfseries\large\SingleSpacing}%
-{\thesubsection}%
-{0.25in}%
-{}
-
+% Not-terrible fonts
 \usepackage{fontspec,xltxtra,xunicode}
 \setmainfont[Ligatures=TeX]{Linux Libertine O}
 \setsansfont[Ligatures=TeX, Scale=MatchLowercase]{Source Sans Pro}
@@ -52,7 +41,21 @@
 
 \usepackage{placeins}
 
+% Always French space. Two spaces is for amateurs.
 \frenchspacing
+
+%%%%%%% Customize
+
+\author{Jeffrey B. Arnold}
+\title{Three Essays on the Quantitative Analysis of War, with an Emphasis on the American Civil War}
+\newcommand{\dissYear}{2016}
+%\newcommand{\dissAdvisorTitle}{Professor}
+\newcommand{\dissAdvisorName}{Randall Stone}
+\newcommand{\dissAdvisorDepartment}{Department of Political Science \\%
+ Arts, Sciences, and Engineering \\%
+ School of Arts and Sciences%
+ }
+\newcommand{\dissAdvisorInstitution}{University of Rochester}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -62,19 +65,24 @@
 
   \begin{center}
     {\LARGE \bfseries
-      Three Essays on the Quantitative Analysis of War,
-      with an Emphasis on the American Civil War
+      \thetitle
       \par
     }
+  \end{center}
 
-    \bigskip%
+  \bigskip%
+  \begin{center}
     by
+  \end{center}
 
-    \bigskip%
-    Jeffrey B. Arnold
+  \bigskip%
+  \begin{center}
+    \theauthor
+  \end{center}
 
-    %%%%%
+  %%%%% 
 
+  \begin{center}
     \bigskip\bigskip\bigskip\bigskip%
     Submitted in Partial Fulfillment of the
 
@@ -83,30 +91,33 @@
 
     \bigskip%
     Doctor of Philosophy
+  \end{center}
 
-    %%%%%
+  %%%%% 
 
+  \begin{center}
     \bigskip\bigskip\bigskip\bigskip%
-    Supervised by Professor Randall Stone
+    Supervised by Professor \dissAdvisorName{} 
 
     \bigskip\bigskip%
-    Department of Political Science
+    \dissAdvisorDepartment{}
 
     \bigskip%
+    \dissAdvisorInstitution{}
+  \end{center}
+  %%%%% 
+
+  \bigskip\bigskip\bigskip\bigskip%
+  \begin{center}
     University of Rochester
-
-    %%%%%
-
-    \bigskip\bigskip\bigskip\bigskip%
-    University of Rochester
-
-    \bigskip%
     Rochester, New York
+  \end{center}
 
-    %%%%%
+  %%%%% 
 
-    \bigskip\bigskip\bigskip\bigskip%
-    2016
+  \bigskip\bigskip\bigskip\bigskip%
+  \begin{center}
+    \dissYear{}
   \end{center}
 
   \vspace*{\fill}
@@ -133,28 +144,24 @@
 
 % Biographical sketch
 \chapter*{Biographical Sketch}
-\markboth{\MakeUppercase{Biographical Sketch}}{}
 \addcontentsline{toc}{chapter}{Biographical Sketch}
 \input{bio}
 
 
 % Acknowledgments
 \chapter*{Acknowledgments}
-\markboth{\MakeUppercase{Acknowledgments}}{}
 \addcontentsline{toc}{chapter}{Acknowledgments}
 \input{acknowledgements}
 
 
 % ABSTRACT
 \chapter*{Abstract}
-\markboth{\MakeUppercase{Abstract}}{}
 \addcontentsline{toc}{chapter}{Abstract}
 \input{abstract}
 
 
 % Contributors and Funding Sources
 \chapter*{Contributors and Funding Sources}
-\markboth{\MakeUppercase{Contributors and Funding Sources}}{}
 \addcontentsline{toc}{chapter}{Contributors and Funding Sources}
 \input{contrib}
 
@@ -192,9 +199,9 @@
 % References
 \clearpage
 \addcontentsline{toc}{chapter}{Bibliography}
-%\singlespacing
+\SingleSpacing
 
 % Bibtex commands go here
-% \printbibliography{}
+\printbibliography{}
 
 \end{document}

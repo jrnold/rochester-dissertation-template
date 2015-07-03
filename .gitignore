@@ -8,7 +8,9 @@
 *.log
 *.lot
 *.toc
+*.run.xml
 # misc
 /auto/
 *~
+/dissertation.pdf
 
